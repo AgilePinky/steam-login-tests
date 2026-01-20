@@ -4,7 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-def test_steam_search():
+def test_google_search():
     driver = webdriver.Chrome()
 
     driver.get("https://store.steampowered.com/")
