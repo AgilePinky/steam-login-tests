@@ -51,4 +51,3 @@ def test_sign_in(driver, wait):
     error_element = wait.until(EC.visibility_of_element_located(Locators.ERROR_TEXT))
 
     assert error_element.is_displayed(), "Сообщение об ошибке отображается"
-    driver.quit()
