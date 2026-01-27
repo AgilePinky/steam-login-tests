@@ -13,8 +13,8 @@ class Locators:
     LOGIN_BUTTON = (By.XPATH, "//a[contains(@class, 'global_action_link')]")
     LOGIN_FIELD = (By.XPATH,"//div[contains(@data-featuretarget, 'login')]//input[contains(@type, 'text')]")
     PASSWORD_FIELD = (By.XPATH,"//input[contains(@type, 'password')]")
-    ENTER_BUTTON = (By.XPATH,"//div[contains(@class, '_16fbihk6Bi9CXuksG7_tLt')]//button[contains(@type, 'submit')]")
-    ERROR_TEXT = (By.XPATH,"//div[contains(@class, '_1W_6HXiG4JJ0By1qN_0fGZ')]")
+    ENTER_BUTTON = (By.XPATH,"//div[contains(@class, 'login_featuretarget_ctn')]//button")
+    ERROR_TEXT = (By.XPATH,"//div[contains(@class, 'login_featuretarget_ctn')]//form//div[5]")
 
 @pytest.fixture
 def driver():
@@ -48,8 +48,6 @@ def test_sign_in(driver, wait):
     enter_button.click()
 
     error_element = wait.until(EC.visibility_of_element_located(Locators.ERROR_TEXT))
-
-    assert error_element.text == fake.sentence()
 
     assert error_element.is_displayed(), "Сообщение об ошибке отображается"
     driver.quit()
