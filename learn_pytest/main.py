@@ -10,6 +10,7 @@ TIMEOUT = 10
 fake = Faker()
 
 class Locators:
+    PAGE = (By.XPATH, "//div[@id='global_header']")
     LOGIN_BUTTON = (By.XPATH, "//a[contains(@class, 'global_action_link')]")
     LOGIN_FIELD = (By.XPATH,"//div[contains(@data-featuretarget, 'login')]//input[contains(@type, 'text')]")
     PASSWORD_FIELD = (By.XPATH,"//input[contains(@type, 'password')]")
@@ -27,12 +28,12 @@ def driver():
 def wait(driver):
     return WebDriverWait(driver, TIMEOUT)
 
-def wait_for_page_load(driver, wait):
-    wait.until(EC.presence_of_element_located((By.XPATH, "//div[@id='global_header']")))
+def wait_for_page_load(wait):
+    wait.until(EC.presence_of_element_located(Locators.PAGE))
 
 def test_sign_in(driver, wait):
     driver.get(MAIN_URL)
-    wait_for_page_load(driver, wait)
+    wait_for_page_load(wait)
 
     login_button = wait.until(EC.element_to_be_clickable(Locators.LOGIN_BUTTON))
     login_button.click()
