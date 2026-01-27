@@ -1,2 +1,3 @@
 .idea
-wiki_test.*
+wiki_test.py
+*.cpython*
