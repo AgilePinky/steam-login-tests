@@ -20,7 +20,6 @@ class Locators:
 @pytest.fixture
 def driver():
     driver = webdriver.Chrome()
-    driver.implicitly_wait(0)
     yield driver
     driver.quit()
 
@@ -28,26 +27,27 @@ def driver():
 def wait(driver):
     return WebDriverWait(driver, TIMEOUT)
 
-def wait_for_page_load(wait):
-    wait.until(EC.presence_of_element_located(Locators.PAGE))
-
 def test_sign_in(driver, wait):
     driver.get(MAIN_URL)
-    wait_for_page_load(wait)
+    wait.until(EC.presence_of_element_located(Locators.PAGE))
 
     login_button = wait.until(EC.element_to_be_clickable(Locators.LOGIN_BUTTON))
     login_button.click()
+    wait.until(EC.presence_of_element_located(Locators.PAGE))
 
     login_field = wait.until(EC.visibility_of_element_located(Locators.LOGIN_FIELD))
-    password_field = wait.until(EC.visibility_of_element_located(Locators.PASSWORD_FIELD))
-    enter_button = wait.until(EC.element_to_be_clickable(Locators.ENTER_BUTTON))
     login_field.click()
-
     login_field.send_keys(fake.email())
+
+    password_field = wait.until(EC.visibility_of_element_located(Locators.PASSWORD_FIELD))
     password_field.click()
     password_field.send_keys(fake.password())
+
+    enter_button = wait.until(EC.element_to_be_clickable(Locators.ENTER_BUTTON))
     enter_button.click()
 
+    wait.until(EC.text_to_be_present_in_element(Locators.ERROR_TEXT, 'П'))
     error_element = wait.until(EC.visibility_of_element_located(Locators.ERROR_TEXT))
+    expected_text = 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.'
 
-    assert error_element.is_displayed(), "Сообщение об ошибке отображается"
+    assert error_element.text == expected_text, "Сообщение об ошибке отображается"
