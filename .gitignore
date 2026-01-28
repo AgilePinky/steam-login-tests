@@ -1,2 +1,2 @@
 .idea
-*.cpython*
+learn_pytest/__pycache__/*
