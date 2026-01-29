@@ -16,8 +16,6 @@ class Locators:
     LOGIN_FIELD = (By.XPATH, "//div[contains(@data-featuretarget, 'login')]//input[contains(@type, 'text')]")
     PASSWORD_FIELD = (By.XPATH, "//input[contains(@type, 'password')]")
     ENTER_BUTTON = (By.XPATH, "//div[contains(@class, 'login_featuretarget_ctn')]//button")
-    # ERROR_TEXT = (By.XPATH, "//div[contains(@class, 'login_featuretarget_ctn')]//form"
-    #                         "//div[5][contains(text(), 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.')]")
     ERROR_TEXT = (By.XPATH, "//div[contains(@class, 'login_featuretarget_ctn')]//form//div[5]")
 
 
@@ -61,7 +59,6 @@ def test_sign_in(driver, wait):
 
     wait.until(is_text_matched(Locators.ERROR_TEXT))
     error_element = wait.until(EC.visibility_of_element_located(Locators.ERROR_TEXT))
-    # error_element = wait.until(EC.presence_of_element_located(Locators.ERROR_TEXT))
     expected_text = 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.'
 
     assert error_element.text == expected_text, (f"Ожидалось: {expected_text}, \n"
