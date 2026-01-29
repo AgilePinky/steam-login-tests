@@ -16,8 +16,9 @@ class Locators:
     LOGIN_FIELD = (By.XPATH, "//div[contains(@data-featuretarget, 'login')]//input[contains(@type, 'text')]")
     PASSWORD_FIELD = (By.XPATH, "//input[contains(@type, 'password')]")
     ENTER_BUTTON = (By.XPATH, "//div[contains(@class, 'login_featuretarget_ctn')]//button")
-    ERROR_TEXT = (By.XPATH, "//div[contains(@class, 'login_featuretarget_ctn')]//form"
-                  "//div[5][contains(text(), 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.')]")
+    # ERROR_TEXT = (By.XPATH, "//div[contains(@class, 'login_featuretarget_ctn')]//form"
+    #                         "//div[5][contains(text(), 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.')]")
+    ERROR_TEXT = (By.XPATH, "//div[contains(@class, 'login_featuretarget_ctn')]//form//div[5]")
 
 
 @pytest.fixture
@@ -30,6 +31,13 @@ def driver():
 @pytest.fixture
 def wait(driver):
     return WebDriverWait(driver, TIMEOUT)
+
+def is_text_matched(locator):
+    def _predicate(driver):
+        element = driver.find_element(*locator)
+        text = element.text
+        return text == 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.'
+    return _predicate
 
 
 def test_sign_in(driver, wait):
@@ -51,8 +59,10 @@ def test_sign_in(driver, wait):
     enter_button = wait.until(EC.element_to_be_clickable(Locators.ENTER_BUTTON))
     enter_button.click()
 
-    error_element = wait.until(EC.presence_of_element_located(Locators.ERROR_TEXT))
+    wait.until(is_text_matched(Locators.ERROR_TEXT))
+    error_element = wait.until(EC.visibility_of_element_located(Locators.ERROR_TEXT))
+    # error_element = wait.until(EC.presence_of_element_located(Locators.ERROR_TEXT))
     expected_text = 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.'
 
     assert error_element.text == expected_text, (f"Ожидалось: {expected_text}, \n"
-                                                 f"Фактический результат: {error_element.text}\n")
+                                                 f"Фактический результат: {error_element}\n")

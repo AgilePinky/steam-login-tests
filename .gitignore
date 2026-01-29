@@ -1,2 +1,2 @@
 .idea
-learn_pytest/__pycache__/*
+__pycache__/
