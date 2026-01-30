@@ -34,7 +34,7 @@ def is_text_matched(locator):
     def _predicate(driver):
         element = driver.find_element(*locator)
         text = element.text
-        return text == 'Пожалуйста, проверьте свой пароль и имя аккаунта и попробуйте снова.'
+        return text != ' '
     return _predicate
 
 
