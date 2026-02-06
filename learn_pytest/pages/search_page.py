@@ -19,7 +19,8 @@ class SearchPage:
     TRIGGER_FILTER_MENU = (By.XPATH, "//button[contains(@class, 'trigger')]")
     OPTION_PRICE_DESC = (By.XPATH, "//*[@id = 'Price_DESC']")
     OPTIONS_MENU = (By.XPATH, "//*[@id = 'sort_by_droplist']")
-    ALL_GAMES = (By.XPATH, "//span[@class='title']")
+    ALL_GAMES_TITTLE = (By.XPATH, "//span[@class='title']")
+    ALL_GAMES_PRICES = (By.XPATH, "//div[contains(@class, 'discount_final_price')]")
     DYNAMIC_SEARCHING_LABEL = (By.XPATH, "//div[contains(@class, 'tag_dynamic')]//span[contains(@class, 'label')]")
     DYNAMIC_SEARCHING_RESULTS = (By.XPATH, "//*[@id = 'search_results_filtered_warning_persistent']")
     GLOBAL_HEADER_ELEMENT = (By.XPATH, "//*[@id = 'global_header']")
@@ -40,4 +41,5 @@ class SearchPage:
         self.wait_for_page_loading()
         self.wait.until(EC.visibility_of_element_located(self.DYNAMIC_SEARCHING_RESULTS))
         time.sleep(1)
-        return self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES))[:n]
+        # return self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES_TITTLE))[:n]
+        return self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES_PRICES))[:n]
