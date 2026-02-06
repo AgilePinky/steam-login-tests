@@ -1,7 +1,7 @@
 import pytest
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
-from config.config_reader import ConfigReader
+from learn_pytest.config.config_reader import ConfigReader
 
 @pytest.fixture(scope="session")
 def driver():

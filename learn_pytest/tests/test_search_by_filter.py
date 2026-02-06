@@ -1,7 +1,7 @@
 import pytest
-from pages.search_page import SearchPage
-from pages.home_page import HomePage
-from config.config_reader import ConfigReader
+from learn_pytest.pages.search_page import SearchPage
+from learn_pytest.pages.home_page import HomePage
+from learn_pytest.config.config_reader import ConfigReader
 
 @pytest.mark.parametrize("title, n", [("The Witcher", 10), ("Fallout", 20)])
 def test_search_n_games(n, title, driver, wait):
@@ -24,5 +24,3 @@ def test_search_n_games(n, title, driver, wait):
     for i in list_of_games:
         print(i.text)
     print()
-
-    list_of_games = []

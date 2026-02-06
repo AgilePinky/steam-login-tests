@@ -1,20 +1,12 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+import time
 
 class SearchPage:
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self, driver=None, timeout=10):
-        if not hasattr(self, 'driver') or driver is not None:
-            self.driver = driver
-            self.wait = WebDriverWait(self.driver, timeout) if driver else None
+        self.driver = driver
+        self.wait = WebDriverWait(self.driver, timeout)
 
     def wait_text_match(self, current_locator, expected_text):
         def _predicate(driver):
@@ -45,7 +37,7 @@ class SearchPage:
         self.wait.until(self.wait_text_match(self.TRIGGER_FILTER_MENU, text_of_filter))
 
     def get_n_games(self, n=10):
+        self.wait_for_page_loading()
         self.wait.until(EC.visibility_of_element_located(self.DYNAMIC_SEARCHING_RESULTS))
-        self.wait.until(EC.element_to_be_clickable(self.ALL_GAMES))
-        n_games = self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES))[:n]
-        return n_games
+        time.sleep(1)
+        return self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES))[:n]

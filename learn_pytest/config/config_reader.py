@@ -6,7 +6,7 @@ class ConfigReader:
             self.config = json.load(f)
 
     def get_base_url(self):
-        return self.config("base_url")
+        return self.config["base_url"]
 
     def get_timeout(self):
-        return self.config("timeout")
+        return self.config["timeout"]

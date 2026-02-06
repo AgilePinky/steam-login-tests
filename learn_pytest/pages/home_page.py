@@ -3,17 +3,9 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 class HomePage:
-    _instance = None
-
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cls._instance
-
     def __init__(self, driver=None, timeout=10):
-        if not hasattr(self, 'driver') or driver is not None:
-            self.driver = driver
-            self.wait = WebDriverWait(self.driver, timeout) if driver else None
+        self.driver = driver
+        self.wait = WebDriverWait(self.driver, timeout)
 
     SEARCH_FIELD = (By.XPATH, "//input[contains(@type, 'text')]")
     SEARCHING_BUTTON = (By.XPATH, "//button[contains(@type, 'submit')]")
