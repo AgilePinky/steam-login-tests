@@ -20,20 +20,23 @@ def test_search_n_games(n, title, driver, wait):
     search_page.choose_option_price_desc()
     list_of_games = search_page.get_n_games(n)
 
-    # print()
-    # for i in list_of_games:
-    #     print(i.text)
-    # print()
+    print()
+    for i in list_of_games:
+        print(i.text[:-4])
+    print()
 
     is_ordering_correctly = True
     biggest_price = 100000
+    wrong_ordered_price = 0
     print()
     for i in list_of_games:
-        if biggest_price >= float(i.text[:-4]):
-            biggest_price = float(i.text[:-4])
+        if biggest_price >= float(i.text[:-4].replace(',','.')):
+            biggest_price = float(i.text[:-4].replace(',','.'))
         else:
+            wrong_ordered_price = (f"Sorted wrong! Number {float(i.text[:-4].replace(',','.'))} "
+                                   f"is bigger than {biggest_price}")
             is_ordering_correctly = False
             break
     print()
 
-    assert is_ordering_correctly
+    assert is_ordering_correctly, wrong_ordered_price
