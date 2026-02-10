@@ -1,7 +1,9 @@
 import json
 
 class ConfigReader:
-    def __init__(self, config_file="learn_pytest/config/config.json"):
+
+
+    def __init__(self, config_file="../config/config.json"):
         with open(config_file) as f:
             self.config = json.load(f)
 

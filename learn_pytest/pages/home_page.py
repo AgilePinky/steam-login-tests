@@ -1,14 +1,15 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from learn_pytest.config.config_reader import ConfigReader
+from config.config_reader import ConfigReader
+from tests.driver_singleton import Driver
 
 class HomePage:
 
-    TIMEOUT = ConfigReader()
+    config_reader = ConfigReader()
 
-    def __init__(self, driver=None, timeout=TIMEOUT.get_timeout()):
-        self.driver = driver
+    def __init__(self, timeout=config_reader.get_timeout()):
+        self.driver = Driver()
         self.wait = WebDriverWait(self.driver, timeout)
 
     SEARCH_FIELD = (By.XPATH, "//input[contains(@type, 'text')]")
