@@ -1,17 +1,22 @@
+from selenium.common import ElementNotVisibleException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from learn_pytest.config.config_reader import ConfigReader
 
 class SearchPage:
-    def __init__(self, driver=None, timeout=10):
+
+    TIMEOUT = ConfigReader()
+
+    def __init__(self, driver=None, timeout=TIMEOUT.get_timeout()):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, timeout)
 
     def wait_text_match(self, current_locator, expected_text):
         def _predicate(driver):
             try:
-                return EC.element_to_be_clickable(current_locator)(driver).text == expected_text
-            except Exception:
+                return EC.visibility_of_element_located(current_locator)(driver).text == expected_text
+            except ElementNotVisibleException:
                 return False
         return _predicate
 
@@ -28,14 +33,14 @@ class SearchPage:
         return self.wait.until(check_element_loaded)
 
     TRIGGER_FILTER_MENU = (By.XPATH, "//button[contains(@class, 'trigger')]")
-    OPTION_PRICE_DESC = (By.XPATH, "//*[@id = 'Price_DESC']")
-    OPTIONS_MENU = (By.XPATH, "//*[@id = 'sort_by_droplist']")
+    OPTION_PRICE_DESC = (By.ID, "Price_DESC")
+    OPTIONS_MENU = (By.ID, "sort_by_droplist")
     ALL_GAMES_TITTLE = (By.XPATH, "//span[@class='title']")
     ALL_GAMES_PRICES = (By.XPATH, "//div[contains(@class, 'discount_final_price')]")
     DYNAMIC_SEARCHING_LABEL = (By.XPATH, "//div[contains(@class, 'tag_dynamic')]//span[contains(@class, 'label')]")
-    DYNAMIC_SEARCHING_RESULTS = (By.XPATH, "//*[@id = 'search_results_filtered_warning_persistent']")
-    GLOBAL_HEADER_ELEMENT = (By.XPATH, "//*[@id = 'global_header']")
-    LIST_OF_SORTED_GAMES = (By.XPATH, "//*[@id = 'search_result_container']")
+    DYNAMIC_SEARCHING_RESULTS = (By.ID, "search_results_filtered_warning_persistent")
+    GLOBAL_HEADER_ELEMENT = (By.ID, "global_header")
+    LIST_OF_SORTED_GAMES = (By.ID, "search_result_container")
 
     def wait_for_page_loading(self):
         self.wait.until(EC.visibility_of_element_located(self.GLOBAL_HEADER_ELEMENT))

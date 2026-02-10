@@ -1,15 +1,19 @@
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from learn_pytest.config.config_reader import ConfigReader
 
 class HomePage:
-    def __init__(self, driver=None, timeout=10):
+
+    TIMEOUT = ConfigReader()
+
+    def __init__(self, driver=None, timeout=TIMEOUT.get_timeout()):
         self.driver = driver
         self.wait = WebDriverWait(self.driver, timeout)
 
     SEARCH_FIELD = (By.XPATH, "//input[contains(@type, 'text')]")
     SEARCHING_BUTTON = (By.XPATH, "//button[contains(@type, 'submit')]")
-    GLOBAL_HEADER_ELEMENT = (By.XPATH, "//*[@id = 'global_header']")
+    GLOBAL_HEADER_ELEMENT = (By.ID, "global_header")
 
     def wait_for_page_loading(self):
         self.wait.until(EC.visibility_of_element_located(self.GLOBAL_HEADER_ELEMENT))
