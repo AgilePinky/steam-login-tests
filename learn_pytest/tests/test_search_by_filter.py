@@ -3,29 +3,21 @@ from learn_pytest.pages.search_page import SearchPage
 from learn_pytest.pages.home_page import HomePage
 from learn_pytest.config.config_reader import ConfigReader
 
+def parse_prices(text):
+    return float(text[:-4].replace(',', '.'))
+
 def get_list_of_games(list_of_games):
-    print()
-    for i in list_of_games:
-        print(i.text[:-4])
-    print()
+    prices = [parse_prices(game.text) for game in list_of_games]
+    sorted_prices = sorted(prices, reverse=True)
+    error_text = ""
 
-    is_ordering_correctly = True
-    biggest_price = 100000
-    error_text = ''
-    biggest_price_number = -1
-
-    for i in list_of_games:
-        if biggest_price >= float(i.text[:-4].replace(',', '.')):
-            biggest_price = float(i.text[:-4].replace(',', '.'))
-            biggest_price_number += 1
-        else:
-            error_text = (f"Sorted wrong!\n"
-                            f"Expected that price at position {biggest_price_number}( eq {biggest_price}) in list will bigger than {float(i.text[:-4].replace(',', '.'))}\n"
-                            f"But actually {float(i.text[:-4].replace(',', '.'))} is bigger than {biggest_price}")
-            is_ordering_correctly = False
-            break
-    print()
-    return [is_ordering_correctly, error_text]
+    if not prices == sorted_prices:
+        error_text = (
+            "Sorted wrong!\n"
+            f"Actual order:   {prices}\n"
+            f"Expected order: {sorted_prices}"
+        )
+    return prices == sorted_prices, error_text
 
 @pytest.mark.parametrize("title, n", [("The Witcher", 10), ("Fallout", 20)])
 def test_search_n_games(n, title, driver, wait):
