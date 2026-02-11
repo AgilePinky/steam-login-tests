@@ -2,8 +2,9 @@ import json
 
 class ConfigReader:
 
+    CONFIG_PATH = "config/config.json"
 
-    def __init__(self, config_file="../config/config.json"):
+    def __init__(self, config_file=CONFIG_PATH):
         with open(config_file) as f:
             self.config = json.load(f)
 
@@ -12,3 +13,6 @@ class ConfigReader:
 
     def get_timeout(self):
         return self.config["timeout"]
+
+    def get_poll_frequency(self):
+        return self.config["poll_frequency"]

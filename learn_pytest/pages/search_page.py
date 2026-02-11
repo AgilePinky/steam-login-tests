@@ -1,5 +1,3 @@
-import time
-
 from selenium.common import ElementNotVisibleException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
@@ -7,8 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from config.config_reader import ConfigReader
 from tests.driver_singleton import Driver
 
-class SearchPage:
 
+class SearchPage:
     TRIGGER_FILTER_MENU = (By.XPATH, "//button[contains(@class, 'trigger')]")
     OPTION_PRICE_DESC = (By.ID, "Price_DESC")
     OPTIONS_MENU = (By.ID, "sort_by_droplist")
@@ -21,9 +19,10 @@ class SearchPage:
 
     config_reader = ConfigReader()
 
-    def __init__(self, timeout=config_reader.get_timeout()):
+    def __init__(self, timeout=config_reader.get_timeout(),
+                 poll_frequency=config_reader.get_poll_frequency()):
         self.driver = Driver()
-        self.wait = WebDriverWait(self.driver, timeout)
+        self.wait = WebDriverWait(self.driver, timeout, poll_frequency)
 
     def wait_text_match(self, current_locator, expected_text):
         def _predicate(driver):
@@ -31,6 +30,7 @@ class SearchPage:
                 return EC.element_to_be_clickable(current_locator)(driver).text == expected_text
             except ElementNotVisibleException:
                 return False
+
         return _predicate
 
     def wait_until_load_elements(self):
@@ -39,9 +39,10 @@ class SearchPage:
             style = element.get_attribute('style')
             opacity = element.value_of_css_property('opacity')
 
-            if opacity != '0.5' and (not style or 'opacity: 0.5' not in style):
+            if not style or 'opacity' not in style:
                 return element
             return False
+
         return self.wait.until(check_element_loaded)
 
     def wait_for_page_loading(self):
@@ -52,13 +53,12 @@ class SearchPage:
 
     def choose_option_price_desc(self):
         self.wait.until(EC.visibility_of_element_located(self.OPTIONS_MENU))
-        text_of_filter = self.wait.until(EC.element_to_be_clickable(self.OPTION_PRICE_DESC)).text
         self.wait.until(EC.element_to_be_clickable(self.OPTION_PRICE_DESC)).click()
-        self.wait.until(self.wait_text_match(self.TRIGGER_FILTER_MENU, text_of_filter))
 
-    def get_n_games(self, n=10):
+    def get_n_games_prices(self, n=10):
         self.wait_for_page_loading()
         self.wait_until_load_elements()
         self.wait.until(EC.visibility_of_element_located(self.DYNAMIC_SEARCHING_RESULTS))
-        # time.sleep(1)
-        return self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES_PRICES))[:n]
+
+        unprepared_price_list = self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES_PRICES))[:n]
+        return [float(game.text[:4].replace(',','.')) for game in unprepared_price_list]
