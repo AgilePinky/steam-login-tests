@@ -1,4 +1,4 @@
-from selenium.common import ElementNotVisibleException
+from selenium.common.exceptions import ElementNotInteractableException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -28,7 +28,7 @@ class SearchPage:
         def _predicate(driver):
             try:
                 return EC.element_to_be_clickable(current_locator)(driver).text == expected_text
-            except ElementNotVisibleException:
+            except ElementNotInteractableException:
                 return False
 
         return _predicate
@@ -37,7 +37,6 @@ class SearchPage:
         def check_element_loaded(driver):
             element = self.wait.until(EC.presence_of_element_located(self.LIST_OF_SORTED_GAMES))
             style = element.get_attribute('style')
-            opacity = element.value_of_css_property('opacity')
 
             if not style or 'opacity' not in style:
                 return element
