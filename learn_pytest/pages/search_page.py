@@ -53,10 +53,9 @@ class SearchPage:
     def choose_option_price_desc(self):
         self.wait.until(EC.visibility_of_element_located(self.OPTIONS_MENU))
         self.wait.until(EC.element_to_be_clickable(self.OPTION_PRICE_DESC)).click()
+        self.wait_until_load_elements()
 
     def get_n_games_prices(self, n=10):
-        self.wait_for_page_loading()
-        self.wait_until_load_elements()
         self.wait.until(EC.visibility_of_element_located(self.DYNAMIC_SEARCHING_RESULTS))
 
         unprepared_price_list = self.wait.until(EC.presence_of_all_elements_located(self.ALL_GAMES_PRICES))[:n]

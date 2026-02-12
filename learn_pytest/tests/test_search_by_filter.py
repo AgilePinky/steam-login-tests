@@ -14,7 +14,7 @@ def test_search_n_games(n, title, driver):
     home_page.wait_for_page_loading()
     home_page.click_on_search_field()
     home_page.input_request(title)
-    home_page.click_searching_button(search_page)
+    home_page.click_searching_button()
 
     search_page.wait_for_page_loading()
     search_page.click_sort_dropdown()

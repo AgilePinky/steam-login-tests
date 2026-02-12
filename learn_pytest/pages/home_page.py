@@ -28,6 +28,5 @@ class HomePage:
         search_field.clear()
         search_field.send_keys(name_of_game)
 
-    def click_searching_button(self, searching_page):
+    def click_searching_button(self):
         self.wait.until(EC.element_to_be_clickable(self.SEARCHING_BUTTON)).click()
-        return searching_page
